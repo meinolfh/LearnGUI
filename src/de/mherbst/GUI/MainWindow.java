@@ -1,21 +1,21 @@
 package de.mherbst.GUI;
 
 import java.awt.EventQueue;
-import java.awt.ScrollPane;
 import java.awt.Toolkit;
-
+import java.net.URL;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import java.awt.Dimension;
 import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
-
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.JTabbedPane;
+import javax.swing.BorderFactory;
 
 public class MainWindow {
 
@@ -44,6 +44,7 @@ public class MainWindow {
 		initialize();
 	}
 
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -51,6 +52,8 @@ public class MainWindow {
 
 		// Bildschirmgröße ermitteln
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenHeight = screenSize.height;
+		int screenWidth =  screenSize.width;
 
 		frame = new JFrame();
 
@@ -135,10 +138,36 @@ public class MainWindow {
 		root.add(nutsNode);
 		
 		JTree tree = new JTree(root);
-		//tree.setRootVisible(false);
+
+		try {
+			URL iconURL = MainWindow.class.getResource("../../../de/mherbst/GUI/resources/Kreis10.jpg");
+			ImageIcon imageIcon = new ImageIcon(iconURL);
+	        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+	        renderer.setLeafIcon(imageIcon);
+	        tree.setCellRenderer(renderer);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
+        tree.setShowsRootHandles(true);
+        tree.setRootVisible(false);
+        
+        JPanel leftPanel = new JPanel();
+        //leftPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+        
+        leftPanel.setLayout(new BorderLayout());
+        leftPanel.setMinimumSize(new Dimension(150, screenHeight));
+        leftPanel.setPreferredSize(new Dimension(150, screenHeight));
+        
+        InputField inputField = new InputField(20);
+        
+        
+        leftPanel.add(inputField, BorderLayout.NORTH);
+        leftPanel.add(new JScrollPane(tree), BorderLayout.CENTER);
+        
+		splitPane.setLeftComponent(leftPanel);
+        
 		
-		splitPane.setLeftComponent(new JScrollPane(tree));
 		
         JPanel panelRot = new JPanel();
         JPanel panelBlue = new JPanel();
